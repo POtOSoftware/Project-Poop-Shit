@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/player.png" type="Texture" id=2]
@@ -7,6 +7,13 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
+
+[sub_resource type="InputEventKey" id=2]
+scancode = 82
+physical_scancode = 82
+
+[sub_resource type="ShortCut" id=3]
+shortcut = SubResource( 2 )
 
 [node name="Player" type="KinematicBody2D" groups=["player"]]
 script = ExtResource( 1 )
@@ -62,6 +69,7 @@ margin_left = -312.0
 margin_top = -168.0
 margin_right = -218.0
 margin_bottom = -148.0
+shortcut = SubResource( 3 )
 text = "reload scene"
 
 [node name="dbg_Sliders" type="Control" parent="dbg_DebugLayer/dbg_DebugMenu"]

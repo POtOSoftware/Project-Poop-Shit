@@ -1,0 +1,17 @@
+#########################
+#########################
+### Project Poop Shit ###
+#########################
+#########################
+
+	Development start date: 3/2/23
+	Development end date:   ??????
+
+
+####################
+# Project Planning #
+####################
+
+	Target platforms: Windows, Linux, HTML5
+	Target hardware:  Low-end laptops/Chromebooks
+	Target size:      < 25 MB

@@ -10,14 +10,18 @@ var blood = load("res://Assets/Blood.tscn")
 
 var velocity = Vector2()
 
+onready var collision = $CollisionShape2D
+onready var detection_ray = $DetectionRay
+
 func die():
 	is_dead = true
 	ai_enabled = false
+	collision.disabled = true
 	
-	var blood_instance = blood.instance()
-	get_tree().current_scene.add_child(blood_instance)
-	blood_instance.global_position = global_position
-	blood_instance.rotation = global_position.angle_to_point(Global.player.global_position)
+	#var blood_instance = blood.instance()
+	#get_tree().current_scene.add_child(blood_instance)
+	#blood_instance.global_position = global_position
+	#blood_instance.rotation = global_position.angle_to_point(Global.player.global_position)
 	
 	set_process(false)
 	set_physics_process(false)
@@ -25,3 +29,11 @@ func die():
 func _physics_process(delta):
 	if health <= 0 and is_dead == false:
 		die()
+	
+	if ai_enabled:
+		update_ai()
+
+
+func update_ai():
+	if detection_ray.get_collider() == Global.player:
+		$Gun.fire()

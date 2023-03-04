@@ -3,7 +3,7 @@
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/player.png" type="Texture" id=2]
 [ext_resource path="res://Player/dbg_DebugMenu.gd" type="Script" id=3]
-[ext_resource path="res://Player/Gun.gd" type="Script" id=4]
+[ext_resource path="res://Assets/Gun/Gun.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
@@ -31,12 +31,8 @@ smoothing_enabled = true
 smoothing_speed = 20.0
 editor_draw_drag_margin = true
 
-[node name="Gun" type="Node2D" parent="."]
+[node name="Gun" parent="." instance=ExtResource( 4 )]
 position = Vector2( 13, 0 )
-script = ExtResource( 4 )
-
-[node name="RayCast2D" type="RayCast2D" parent="Gun"]
-cast_to = Vector2( 50, 0 )
 
 [node name="dbg_DebugLayer" type="CanvasLayer" parent="."]
 layer = 128
@@ -71,6 +67,27 @@ margin_right = -218.0
 margin_bottom = -148.0
 shortcut = SubResource( 3 )
 text = "reload scene"
+
+[node name="dbg_KillAll" type="Button" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons"]
+margin_left = -208.0
+margin_top = -168.0
+margin_right = -196.0
+margin_bottom = -148.0
+text = "kill all"
+
+[node name="dbg_DisableAI" type="CheckBox" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons"]
+margin_left = -152.0
+margin_top = -168.0
+margin_right = -63.0
+margin_bottom = -144.0
+text = "disable ai"
+
+[node name="dbg_GodMode" type="CheckBox" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons"]
+margin_left = -64.0
+margin_top = -168.0
+margin_right = -40.0
+margin_bottom = -144.0
+text = "god mode"
 
 [node name="dbg_Sliders" type="Control" parent="dbg_DebugLayer/dbg_DebugMenu"]
 anchor_right = 1.0
@@ -114,6 +131,22 @@ margin_right = 315.0
 margin_bottom = 174.0
 text = "PAUSED"
 
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="UILayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HealthBar" type="ProgressBar" parent="UILayer/UI"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -14.0
+step = 1.0
+
 [connection signal="pressed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_ReloadScene" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_ReloadScene_pressed"]
+[connection signal="pressed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_KillAll" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_KillAll_pressed"]
+[connection signal="toggled" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_DisableAI" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_DisableAI_toggled"]
+[connection signal="toggled" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_GodMode" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_GodMode_toggled"]
 [connection signal="value_changed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_TimescaleLabel/dbg_TimescaleSlider" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_TimescaleSlider_value_changed"]
 [connection signal="value_changed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_CameraZoomLabel/dbg_CameraZoom" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_CameraZoom_value_changed"]

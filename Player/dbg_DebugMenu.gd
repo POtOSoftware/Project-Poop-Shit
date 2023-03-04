@@ -28,3 +28,12 @@ func _on_dbg_TimescaleSlider_value_changed(value):
 func _on_dbg_CameraZoom_value_changed(value):
 	camera.zoom = Vector2(value, value)
 	cam_zoom_label.text = "cam zoom: " + str(value)
+
+func _on_dbg_KillAll_pressed():
+	get_tree().call_group("enemy", "die")
+
+func _on_dbg_DisableAI_toggled(button_pressed):
+	get_tree().set_group("enemy", "ai_enabled", not button_pressed)
+
+func _on_dbg_GodMode_toggled(button_pressed):
+	Global.player.can_die = not button_pressed

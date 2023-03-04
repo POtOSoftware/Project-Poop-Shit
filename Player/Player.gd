@@ -3,8 +3,10 @@
 extends KinematicBody2D
 
 # Game-specific vars
-export var player_health : int = 100
-export var can_move : bool = true 
+export var health : int = 100
+export var can_move : bool = true
+
+var can_die : bool = true
 
 # The max jump height in pixels (holding jump)
 export var max_jump_height = 150 setget set_max_jump_height
@@ -53,6 +55,7 @@ onready var jump_buffer_timer = Timer.new()
 # node onready vars
 onready var sprite = $Sprite
 onready var gun = $Gun
+onready var health_bar = $UILayer/UI/HealthBar
 
 func _init():
 	default_gravity = calculate_gravity(max_jump_height, jump_duration)
@@ -64,6 +67,7 @@ func _init():
 
 func _ready():
 	Global.player = self
+	Global.player_gun = $Gun
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	
 	add_child(coyote_timer)
@@ -76,9 +80,19 @@ func _ready():
 
 func _exit_tree():
 	Global.player = null
+	Global.player_gun = null
+
+func die():
+	can_die = false
+	queue_free()
 
 func _physics_process(delta):
 	acc.x = 0
+	
+	health_bar.value = health
+	
+	if health <= 0 and can_die:
+		die()
 	
 	if is_on_floor():
 		coyote_timer.start()
@@ -124,6 +138,9 @@ func _physics_process(delta):
 	if Input.is_action_just_released("jump"):
 		holding_jump = false
 	
+	if Input.is_action_pressed("fire") and gun.can_fire:
+		Global.player_gun.fire()
+	
 	
 	var gravity = default_gravity
 	
@@ -139,6 +156,7 @@ func _physics_process(delta):
 	
 	vel += acc * delta
 	vel = move_and_slide(vel, Vector2.UP)
+
 
 
 func calculate_gravity(p_max_jump_height, p_jump_duration):

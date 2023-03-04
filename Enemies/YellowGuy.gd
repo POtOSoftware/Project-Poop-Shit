@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 export var health : int = 20
 export var ai_enabled : bool = true
+export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weapon = "pistol"
 
 var player_detected : bool = false
 var is_dead : bool = false
@@ -12,11 +13,16 @@ var velocity = Vector2()
 
 onready var collision = $CollisionShape2D
 onready var detection_ray = $DetectionRay
+onready var gun = $Gun
+
+func _ready():
+	gun.current_weapon = current_weapon
 
 func die():
 	is_dead = true
 	ai_enabled = false
 	collision.disabled = true
+	modulate = Color(0,0,0,1)
 	
 	#var blood_instance = blood.instance()
 	#get_tree().current_scene.add_child(blood_instance)
@@ -36,4 +42,4 @@ func _physics_process(delta):
 
 func update_ai():
 	if detection_ray.get_collider() == Global.player:
-		$Gun.fire()
+		gun.fire()

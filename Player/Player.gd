@@ -5,6 +5,7 @@ extends KinematicBody2D
 # Game-specific vars
 export var health : int = 100
 export var can_move : bool = true
+export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weapon = "pistol"
 
 var can_die : bool = true
 
@@ -67,8 +68,10 @@ func _init():
 
 func _ready():
 	Global.player = self
-	Global.player_gun = $Gun
+	Global.player_gun = gun
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	
+	gun.current_weapon = current_weapon
 	
 	add_child(coyote_timer)
 	coyote_timer.wait_time = coyote_time
@@ -138,7 +141,7 @@ func _physics_process(delta):
 	if Input.is_action_just_released("jump"):
 		holding_jump = false
 	
-	if Input.is_action_pressed("fire") and gun.can_fire:
+	if Input.is_action_pressed("fire"):
 		Global.player_gun.fire()
 	
 	

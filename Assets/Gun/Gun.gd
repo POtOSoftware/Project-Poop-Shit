@@ -2,10 +2,10 @@ extends Node2D
 
 export var bullet_speed : int = 750
 export var ammo : int = 1000
-export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weapon = "pistol"
+#export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weapon = "pistol"
 
+var current_weapon
 var can_fire = true
-var weapon_list = []
 var damage = 0
 
 var weapons = {
@@ -35,7 +35,7 @@ var weapons = {
 }
 
 func fire():
-	if ammo > 0:
+	if ammo > 0 and can_fire:
 		damage = weapons[current_weapon].damage
 		create_bullet(weapons[current_weapon].num_projectiles)
 		ammo -= 1

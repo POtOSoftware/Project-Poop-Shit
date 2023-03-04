@@ -12,7 +12,7 @@ func _physics_process(delta):
 func _on_Bullet_body_entered(body):
 	if not body.is_in_group("player") and not body.is_in_group("bullet"):
 		if body.is_in_group("enemy"):
-			var gun_damage = get_tree().get_current_scene().get_node("Player/GunRoot").damage
+			var gun_damage = Global.player_gun.damage
 			body.health -= gun_damage
 		queue_free()
 	pass

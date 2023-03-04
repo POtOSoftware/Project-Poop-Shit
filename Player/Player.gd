@@ -1,7 +1,9 @@
+# Thank you evpevdev for this sweet and sexy platformer controller
+
 extends KinematicBody2D
 
 # Game-specific vars
-export var player_health : int = 100 setget set_player_health, get_player_health
+export var player_health : int = 100
 export var can_move : bool = true 
 
 # The max jump height in pixels (holding jump)
@@ -61,6 +63,9 @@ func _init():
 
 
 func _ready():
+	Global.player = self
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	
 	add_child(coyote_timer)
 	coyote_timer.wait_time = coyote_time
 	coyote_timer.one_shot = true
@@ -68,7 +73,9 @@ func _ready():
 	add_child(jump_buffer_timer)
 	jump_buffer_timer.wait_time = jump_buffer
 	jump_buffer_timer.one_shot = true
-	
+
+func _exit_tree():
+	Global.player = null
 
 func _physics_process(delta):
 	acc.x = 0
@@ -83,13 +90,13 @@ func _physics_process(delta):
 		sprite.set_flip_h(true)
 		gun.scale.x = -1
 		gun.rotation_degrees = 180
-		gun.position.x = -12
+		gun.position.x = -13
 	if Input.is_action_pressed("move_right"):
 		acc.x = max_acceleration
 		sprite.set_flip_h(false)
 		gun.scale.x = 1
 		gun.rotation_degrees = 0
-		gun.position.x = 12
+		gun.position.x = 13
 	
 	
 	# Check for ground jumps when we can hold jump
@@ -216,9 +223,3 @@ func set_min_jump_height(value):
 func set_double_jump_height(value):
 	double_jump_height = value
 	double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
-
-func set_player_health(value):
-	player_health = value
-
-func get_player_health():
-	return player_health

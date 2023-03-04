@@ -20,6 +20,12 @@ var weapons = {
 
 var current_weapon = "pistol"
 
+func _ready():
+	Global.player_gun = self
+
+func _exit_tree():
+	Global.player_gun = null
+
 func fire():
 	if ammo > 0:
 		damage = weapons[current_weapon].damage
@@ -39,4 +45,3 @@ func create_bullet(num_projectiles : int = 1):
 func _physics_process(delta):
 	if Input.is_action_pressed("fire") and can_fire:
 		fire()
-		print("FIRE!")

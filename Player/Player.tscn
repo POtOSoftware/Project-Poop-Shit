@@ -25,7 +25,7 @@ smoothing_speed = 20.0
 editor_draw_drag_margin = true
 
 [node name="Gun" type="Node2D" parent="."]
-position = Vector2( 12, 0 )
+position = Vector2( 13, 0 )
 script = ExtResource( 4 )
 
 [node name="RayCast2D" type="RayCast2D" parent="Gun"]
@@ -83,6 +83,22 @@ max_value = 1.0
 step = 0.01
 value = 1.0
 
+[node name="dbg_CameraZoomLabel" type="Label" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders"]
+margin_left = -312.0
+margin_top = -92.0
+margin_right = -249.0
+margin_bottom = -78.0
+text = "cam zoom"
+
+[node name="dbg_CameraZoom" type="HSlider" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_CameraZoomLabel"]
+margin_top = 16.0
+margin_right = 152.0
+margin_bottom = 32.0
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 0.5
+
 [node name="dbg_Paused" type="Label" parent="dbg_DebugLayer/dbg_DebugMenu"]
 margin_left = 264.0
 margin_top = 160.0
@@ -92,3 +108,4 @@ text = "PAUSED"
 
 [connection signal="pressed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_ReloadScene" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_ReloadScene_pressed"]
 [connection signal="value_changed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_TimescaleLabel/dbg_TimescaleSlider" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_TimescaleSlider_value_changed"]
+[connection signal="value_changed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_CameraZoomLabel/dbg_CameraZoom" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_CameraZoom_value_changed"]

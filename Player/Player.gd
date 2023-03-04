@@ -1,9 +1,8 @@
 extends KinematicBody2D
 
-# Set these to the name of your action (in the Input Map)
-export var input_left : String = "move_left"
-export var input_right : String = "move_right"
-export var input_jump : String = "jump"
+# Game-specific vars
+export var player_health : int = 100 setget set_player_health, get_player_health
+export var can_move : bool = true 
 
 # The max jump height in pixels (holding jump)
 export var max_jump_height = 150 setget set_max_jump_height
@@ -51,6 +50,7 @@ onready var jump_buffer_timer = Timer.new()
 
 # node onready vars
 onready var sprite = $Sprite
+onready var gun = $Gun
 
 func _init():
 	default_gravity = calculate_gravity(max_jump_height, jump_duration)
@@ -78,17 +78,23 @@ func _physics_process(delta):
 	if not coyote_timer.is_stopped():
 		jumps_left = max_jump_amount
 	
-	if Input.is_action_pressed(input_left):
+	if Input.is_action_pressed("move_left"):
 		acc.x = -max_acceleration
 		sprite.set_flip_h(true)
-	if Input.is_action_pressed(input_right):
+		gun.scale.x = -1
+		gun.rotation_degrees = 180
+		gun.position.x = -12
+	if Input.is_action_pressed("move_right"):
 		acc.x = max_acceleration
 		sprite.set_flip_h(false)
+		gun.scale.x = 1
+		gun.rotation_degrees = 0
+		gun.position.x = 12
 	
 	
 	# Check for ground jumps when we can hold jump
 	if can_hold_jump:
-		if Input.is_action_pressed(input_jump):
+		if Input.is_action_pressed("jump"):
 			# Dont use double jump when holding down
 			if is_on_floor():
 				jump()
@@ -99,7 +105,7 @@ func _physics_process(delta):
 			jump()
 	
 	# Check for jumps in the air
-	if Input.is_action_just_pressed(input_jump):
+	if Input.is_action_just_pressed("jump"):
 		holding_jump = true
 		jump_buffer_timer.start()
 		
@@ -108,7 +114,7 @@ func _physics_process(delta):
 			jump()
 		
 	
-	if Input.is_action_just_released(input_jump):
+	if Input.is_action_just_released("jump"):
 		holding_jump = false
 	
 	
@@ -126,7 +132,6 @@ func _physics_process(delta):
 	
 	vel += acc * delta
 	vel = move_and_slide(vel, Vector2.UP)
-
 
 
 func calculate_gravity(p_max_jump_height, p_jump_duration):
@@ -212,4 +217,8 @@ func set_double_jump_height(value):
 	double_jump_height = value
 	double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
 
-	
+func set_player_health(value):
+	player_health = value
+
+func get_player_health():
+	return player_health

@@ -14,4 +14,4 @@
 
 	Target platforms: Windows, Linux, HTML5
 	Target hardware:  Low-end laptops/Chromebooks
-	Target size:      < 25 MB
+	Target size:      < 50 MB

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/player.png" type="Texture" id=2]
@@ -7,6 +7,37 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
+
+[sub_resource type="Animation" id=4]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:percent_visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "show_message"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:percent_visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
 
 [sub_resource type="InputEventKey" id=2]
 scancode = 82
@@ -33,6 +64,11 @@ editor_draw_drag_margin = true
 
 [node name="Gun" parent="." instance=ExtResource( 4 )]
 position = Vector2( 13, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../UILayer/UI/MessageLabel")
+anims/RESET = SubResource( 4 )
+anims/show_message = SubResource( 5 )
 
 [node name="dbg_DebugLayer" type="CanvasLayer" parent="."]
 layer = 128
@@ -143,6 +179,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -14.0
 step = 1.0
+
+[node name="MessageLabel" type="Label" parent="UILayer/UI"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 88.0
+margin_bottom = 102.0
+align = 1
+valign = 1
+percent_visible = 0.0
 
 [connection signal="pressed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_ReloadScene" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_ReloadScene_pressed"]
 [connection signal="pressed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_KillAll" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_KillAll_pressed"]

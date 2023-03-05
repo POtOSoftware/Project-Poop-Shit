@@ -57,6 +57,13 @@ onready var jump_buffer_timer = Timer.new()
 onready var sprite = $Sprite
 onready var gun = $Gun
 onready var health_bar = $UILayer/UI/HealthBar
+onready var message_label = $UILayer/UI/MessageLabel
+onready var animation = $AnimationPlayer
+
+# key variables (not pretty but im too lazy to have a proper key pickup system)
+export var has_red_key : bool = false
+export var has_green_key : bool = false
+export var has_blue_key : bool = false
 
 func _init():
 	default_gravity = calculate_gravity(max_jump_height, jump_duration)
@@ -160,6 +167,12 @@ func _physics_process(delta):
 	vel += acc * delta
 	vel = move_and_slide(vel, Vector2.UP)
 
+
+func display_message(message : String):
+	message_label.text = message # Set message text to string specified in argument
+	animation.play("show_message") # I like this kinda text reveal animation
+	yield(get_tree().create_timer(5), "timeout") # Wait 5 seconds before clearing message
+	message_label.text = "" # Clear message
 
 
 func calculate_gravity(p_max_jump_height, p_jump_duration):

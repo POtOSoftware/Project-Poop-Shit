@@ -190,9 +190,13 @@ align = 1
 valign = 1
 percent_visible = 0.0
 
+[node name="MessageTimer" type="Timer" parent="."]
+wait_time = 5.0
+
 [connection signal="pressed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_ReloadScene" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_ReloadScene_pressed"]
 [connection signal="pressed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_KillAll" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_KillAll_pressed"]
 [connection signal="toggled" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_DisableAI" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_DisableAI_toggled"]
 [connection signal="toggled" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_GodMode" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_GodMode_toggled"]
 [connection signal="value_changed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_TimescaleLabel/dbg_TimescaleSlider" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_TimescaleSlider_value_changed"]
 [connection signal="value_changed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_CameraZoomLabel/dbg_CameraZoom" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_CameraZoom_value_changed"]
+[connection signal="timeout" from="MessageTimer" to="." method="_on_MessageTimer_timeout"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Sprites/ground.png" type="Texture" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Enemies/YellowGuy.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Pickups/Key/Key.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/KeyDoor/KeyDoor.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Pickups/Health/Health.tscn" type="PackedScene" id=7]
 
 [sub_resource type="NavigationPolygon" id=1]
 vertices = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
@@ -85,9 +86,6 @@ position = Vector2( 312, 8 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 24, 232 )
-current_weapon = "assault_rifle"
-max_jump_height = 75
-max_acceleration = 1750
 
 [node name="RedKey" parent="." instance=ExtResource( 5 )]
 modulate = Color( 1, 0, 0, 1 )
@@ -121,3 +119,10 @@ door_type = "green"
 modulate = Color( 0, 0, 1, 1 )
 position = Vector2( 280, 112 )
 door_type = "blue"
+
+[node name="Health" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1192, 360 )
+
+[node name="Health2" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1240, 360 )
+add_health = 100

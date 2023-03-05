@@ -10,7 +10,7 @@ export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weap
 var can_die : bool = true
 
 # The max jump height in pixels (holding jump)
-export var max_jump_height = 150 setget set_max_jump_height
+export var max_jump_height = 75 setget set_max_jump_height
 # The minimum jump height (tapping jump)
 export var min_jump_height = 40 setget set_min_jump_height
 # The height of your jump in the air
@@ -21,7 +21,7 @@ export var jump_duration = 0.3 setget set_jump_duration
 export var falling_gravity_multiplier = 1.5
 # Set to 2 for double jump
 export var max_jump_amount = 1
-export var max_acceleration = 4000
+export var max_acceleration = 1750
 export var friction = 8
 export var can_hold_jump : bool = false
 # You can still jump this many seconds after falling off a ledge
@@ -58,6 +58,7 @@ onready var sprite = $Sprite
 onready var gun = $Gun
 onready var health_bar = $UILayer/UI/HealthBar
 onready var message_label = $UILayer/UI/MessageLabel
+onready var message_timer = $MessageTimer
 onready var animation = $AnimationPlayer
 
 # key variables (not pretty but im too lazy to have a proper key pickup system)
@@ -171,8 +172,9 @@ func _physics_process(delta):
 func display_message(message : String):
 	message_label.text = message # Set message text to string specified in argument
 	animation.play("show_message") # I like this kinda text reveal animation
-	yield(get_tree().create_timer(5), "timeout") # Wait 5 seconds before clearing message
-	message_label.text = "" # Clear message
+	message_timer.start()
+	#yield(get_tree().create_timer(5), "timeout") # Wait 5 seconds before clearing message
+	#message_label.text = "" # Clear message
 
 
 func calculate_gravity(p_max_jump_height, p_jump_duration):
@@ -253,7 +255,15 @@ func set_min_jump_height(value):
 	release_gravity_multiplier = calculate_release_gravity_multiplier(
 		jump_velocity, min_jump_height, default_gravity)
 
-
 func set_double_jump_height(value):
 	double_jump_height = value
 	double_jump_velocity = calculate_jump_velocity2(double_jump_height, default_gravity)
+
+func add_player_health(add_health):
+	health += add_health
+	if health > 100:
+		health = 100
+
+func _on_MessageTimer_timeout():
+	#animation.play_backwards("show_message")
+	message_label.text = "" # Clear message

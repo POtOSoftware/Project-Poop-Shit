@@ -9,6 +9,7 @@ extents = Vector2( 8, 8 )
 
 [node name="YellowGuy" type="KinematicBody2D" groups=["enemy"]]
 script = ExtResource( 2 )
+health = 10
 
 [node name="Sprite" type="Sprite" parent="."]
 modulate = Color( 1, 1, 0, 1 )

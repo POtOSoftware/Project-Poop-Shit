@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Sprites/ground.png" type="Texture" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Pickups/Key/Key.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/KeyDoor/KeyDoor.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Pickups/Health/Health.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Assets/MovingPlatform/MovingPlatform.tscn" type="PackedScene" id=8]
 
 [sub_resource type="NavigationPolygon" id=1]
 vertices = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
@@ -43,6 +44,11 @@ points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 0/z_index = 0
+
+[sub_resource type="Curve2D" id=5]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -8, 0, 0, 0, 0, 0, -184, 0 )
+}
 
 [node name="dev" type="Node2D"]
 
@@ -126,3 +132,19 @@ position = Vector2( 1192, 360 )
 [node name="Health2" parent="." instance=ExtResource( 7 )]
 position = Vector2( 1240, 360 )
 add_health = 100
+
+[node name="MovingPlatform" parent="." instance=ExtResource( 8 )]
+position = Vector2( -232, 152 )
+size = 2
+
+[node name="KinematicBody2D" parent="MovingPlatform" index="0"]
+position = Vector2( -8, 0 )
+scale = Vector2( 2, 1 )
+
+[node name="Path2D" parent="MovingPlatform" index="1"]
+curve = SubResource( 5 )
+
+[node name="PathFollow2D" parent="MovingPlatform/Path2D" index="0"]
+position = Vector2( -8, 0 )
+
+[editable path="MovingPlatform"]

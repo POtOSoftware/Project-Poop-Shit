@@ -11,7 +11,7 @@ var damage = 0
 var weapons = {
 	"pistol" : {
 		damage = 10,
-		fire_rate = 0.5,
+		fire_rate = 0.33,
 		num_projectiles = 1,
 		projectile = preload("res://Assets/Bullet/Bullet.tscn")
 	},

@@ -15,3 +15,9 @@ func set_pause(pause : bool):
 func _init():
 	if cmd_args.has("-debug"):
 		debug_build = true
+		print("## DEBUG MODE ENABLED ##")
+
+func _input(event):
+	if event.is_action_pressed("enable_debug_mode"):
+		debug_build = true
+		print("## DEBUG MODE ENABLED ##")

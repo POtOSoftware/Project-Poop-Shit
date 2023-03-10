@@ -12,6 +12,6 @@
 # Project Planning #
 ####################
 
-	Target platforms: Windows, Linux, HTML5
+	Target platforms: Windows, Linux, HTML5, PSVita
 	Target hardware:  Low-end laptops/Chromebooks
 	Target size:      < 50 MB

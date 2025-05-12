@@ -37,3 +37,14 @@ func _on_dbg_DisableAI_toggled(button_pressed):
 
 func _on_dbg_GodMode_toggled(button_pressed):
 	Global.player.can_die = not button_pressed
+
+func _on_dbg_WeaponSelect_item_selected(index):
+	match index:
+		0:
+			Global.player_gun.current_weapon = "pistol"
+		1:
+			Global.player_gun.current_weapon = "smg"
+		2:
+			Global.player_gun.current_weapon = "assault_rifle"
+		3:
+			Global.player_gun.current_weapon = "death_lazer"

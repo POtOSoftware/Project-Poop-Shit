@@ -57,7 +57,6 @@ shape = SubResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
-zoom = Vector2( 0.5, 0.5 )
 smoothing_enabled = true
 smoothing_speed = 20.0
 editor_draw_drag_margin = true
@@ -72,9 +71,6 @@ anims/show_message = SubResource( 5 )
 
 [node name="dbg_DebugLayer" type="CanvasLayer" parent="."]
 layer = 128
-offset = Vector2( 640, 360 )
-scale = Vector2( 2, 2 )
-transform = Transform2D( 2, 0, 0, 2, 640, 360 )
 
 [node name="dbg_DebugMenu" type="Control" parent="dbg_DebugLayer"]
 pause_mode = 2
@@ -86,15 +82,22 @@ script = ExtResource( 3 )
 [node name="dbg_Background" type="ColorRect" parent="dbg_DebugLayer/dbg_DebugMenu"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -320.0
-margin_top = -180.0
-margin_right = -960.0
-margin_bottom = -540.0
 color = Color( 0, 0, 0, 0.294118 )
 
+[node name="dbg_WeaponSelect" type="OptionButton" parent="dbg_DebugLayer/dbg_DebugMenu"]
+margin_left = 163.0
+margin_top = 44.0
+margin_right = 228.0
+margin_bottom = 64.0
+text = "pistol"
+items = [ "pistol", null, false, 0, null, "smg", null, false, 1, null, "assault_rifle", null, false, 2, null, "death_lazer", null, false, 3, null ]
+selected = 0
+
 [node name="dbg_Buttons" type="Control" parent="dbg_DebugLayer/dbg_DebugMenu"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_left = 315.0
+margin_top = 174.0
+margin_right = 315.0
+margin_bottom = 174.0
 
 [node name="dbg_ReloadScene" type="Button" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons"]
 margin_left = -312.0
@@ -126,14 +129,14 @@ margin_bottom = -144.0
 text = "god mode"
 
 [node name="dbg_Sliders" type="Control" parent="dbg_DebugLayer/dbg_DebugMenu"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 32.0
+margin_right = 3.0
+margin_bottom = 32.0
 
 [node name="dbg_TimescaleLabel" type="Label" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders"]
-margin_left = -312.0
-margin_top = -132.0
-margin_right = -249.0
-margin_bottom = -118.0
+margin_right = 63.0
+margin_bottom = 14.0
 text = "timescale"
 
 [node name="dbg_TimescaleSlider" type="HSlider" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_TimescaleLabel"]
@@ -145,10 +148,9 @@ step = 0.01
 value = 1.0
 
 [node name="dbg_CameraZoomLabel" type="Label" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders"]
-margin_left = -312.0
-margin_top = -92.0
-margin_right = -249.0
-margin_bottom = -78.0
+margin_top = 39.0
+margin_right = 67.0
+margin_bottom = 53.0
 text = "cam zoom"
 
 [node name="dbg_CameraZoom" type="HSlider" parent="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_CameraZoomLabel"]
@@ -193,6 +195,7 @@ percent_visible = 0.0
 [node name="MessageTimer" type="Timer" parent="."]
 wait_time = 5.0
 
+[connection signal="item_selected" from="dbg_DebugLayer/dbg_DebugMenu/dbg_WeaponSelect" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_WeaponSelect_item_selected"]
 [connection signal="pressed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_ReloadScene" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_ReloadScene_pressed"]
 [connection signal="pressed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_KillAll" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_KillAll_pressed"]
 [connection signal="toggled" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_DisableAI" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_DisableAI_toggled"]

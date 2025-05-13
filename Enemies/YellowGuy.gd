@@ -6,7 +6,7 @@ export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weap
 
 # movement stuffs :3
 export(int) var move_speed = 150
-export(int) var jump_power = -500
+export(int) var jump_power = 300
 
 var player_detected : bool = false
 var is_dead : bool = false
@@ -46,11 +46,13 @@ func _physics_process(delta):
 	if ai_enabled:
 		update_ai()
 	
-	velocity = move_and_slide(velocity)
+	velocity = move_and_slide(velocity, Vector2.UP)
 
 func jump():
-	pass
+	if is_on_floor():
+		velocity.y = -jump_power
 
 func update_ai():
 	if detection_ray.get_collider() == Global.player:
 		gun.fire()
+	jump()

@@ -17,6 +17,7 @@ var velocity = Vector2()
 
 onready var collision = $CollisionShape2D
 onready var detection_ray = $DetectionRay
+onready var sprite = $Sprite
 onready var gun = $Gun
 
 func _ready():
@@ -54,5 +55,30 @@ func jump():
 
 func update_ai():
 	if detection_ray.get_collider() == Global.player:
-		gun.fire()
+		gun.fire(self)
 	jump()
+
+func flip_node(value: bool):
+	if value:
+		scale = Vector2(-1, 1)
+		gun.rotation_degrees = 180
+		print(scale)
+	else:
+		scale = Vector2(1, 1)
+		gun.rotation_degrees = 0
+		print(scale)
+
+func _on_PlayerDetection_body_entered(body):
+	var space_state = get_world_2d().direct_space_state
+	
+	if body == Global.player and ai_enabled:
+		var player_pos = Global.player.global_position
+		# draw an invisible line from our position to the player's and get whatever collisions happen on that line, but exclude us, we don't count
+		var result = space_state.intersect_ray(global_position, player_pos, [self])
+		
+		if result:
+			if result.collider == Global.player:
+				if result.normal.x > 0:
+					flip_node(true)
+				else:
+					flip_node(false)

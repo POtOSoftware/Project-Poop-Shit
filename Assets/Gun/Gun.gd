@@ -34,18 +34,19 @@ var weapons = {
 	}
 }
 
-func fire():
+func fire(_exclude: Node2D = null):
 	if ammo > 0 and can_fire:
 		damage = weapons[current_weapon].damage
-		create_bullet(weapons[current_weapon].num_projectiles)
+		create_bullet(weapons[current_weapon].num_projectiles, _exclude)
 		ammo -= 1
 
-func create_bullet(num_projectiles : int = 1):
+func create_bullet(num_projectiles : int = 1, _exclude: Node2D = null):
 	for i in num_projectiles:
 		var projectile_instance = weapons[current_weapon].projectile.instance()
 		projectile_instance.position = self.global_position
 		projectile_instance.direction = Vector2.RIGHT.rotated(rotation)
 		projectile_instance.gun_damage = weapons[current_weapon].damage
+		projectile_instance.set_exclude(_exclude)
 		get_tree().get_root().add_child(projectile_instance)
 	can_fire = false
 	yield(get_tree().create_timer(weapons[current_weapon].fire_rate), "timeout")

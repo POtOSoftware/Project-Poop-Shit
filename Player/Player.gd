@@ -150,7 +150,7 @@ func _physics_process(delta):
 		holding_jump = false
 	
 	if Input.is_action_pressed("fire"):
-		Global.player_gun.fire()
+		Global.player_gun.fire(self)
 	
 	
 	var gravity = default_gravity

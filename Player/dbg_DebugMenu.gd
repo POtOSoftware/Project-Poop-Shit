@@ -48,3 +48,5 @@ func _on_dbg_WeaponSelect_item_selected(index):
 			Global.player_gun.current_weapon = "assault_rifle"
 		3:
 			Global.player_gun.current_weapon = "death_lazer"
+		
+	print("Changed weapon to " + Global.player_gun.current_weapon)

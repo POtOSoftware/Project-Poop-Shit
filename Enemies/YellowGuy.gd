@@ -4,6 +4,10 @@ export var health : int = 20
 export var ai_enabled : bool = true
 export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weapon = "pistol"
 
+# movement stuffs :3
+export(int) var move_speed = 150
+export(int) var jump_power = -500
+
 var player_detected : bool = false
 var is_dead : bool = false
 
@@ -34,7 +38,7 @@ func die():
 
 func _physics_process(delta):
 	# not even our sworn enemies can avoid gravity
-	velocity.y = GameWorld.GRAVITY
+	velocity.y += GameWorld.GRAVITY * delta
 	
 	if health <= 0 and is_dead == false:
 		die()
@@ -44,6 +48,8 @@ func _physics_process(delta):
 	
 	velocity = move_and_slide(velocity)
 
+func jump():
+	pass
 
 func update_ai():
 	if detection_ray.get_collider() == Global.player:

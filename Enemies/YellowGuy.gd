@@ -33,11 +33,16 @@ func die():
 	set_physics_process(false)
 
 func _physics_process(delta):
+	# not even our sworn enemies can avoid gravity
+	velocity.y = GameWorld.GRAVITY
+	
 	if health <= 0 and is_dead == false:
 		die()
 	
 	if ai_enabled:
 		update_ai()
+	
+	velocity = move_and_slide(velocity)
 
 
 func update_ai():

@@ -50,3 +50,7 @@ func _on_dbg_WeaponSelect_item_selected(index):
 			Global.player_gun.current_weapon = "death_lazer"
 		
 	print("Changed weapon to " + Global.player_gun.current_weapon)
+
+func _on_GravityEdit_text_entered(new_text):
+	print("Changed GRAVITY from " + str(GameWorld.GRAVITY) + " to " + new_text)
+	GameWorld.GRAVITY = int(new_text)

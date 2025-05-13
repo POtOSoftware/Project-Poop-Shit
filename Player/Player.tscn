@@ -169,6 +169,19 @@ margin_right = 315.0
 margin_bottom = 174.0
 text = "PAUSED"
 
+[node name="GravityEdit" type="LineEdit" parent="dbg_DebugLayer/dbg_DebugMenu"]
+margin_left = 163.0
+margin_top = 71.0
+margin_right = 221.0
+margin_bottom = 95.0
+text = "1500"
+
+[node name="Label" type="Label" parent="dbg_DebugLayer/dbg_DebugMenu/GravityEdit"]
+margin_left = 65.0
+margin_right = 110.0
+margin_bottom = 14.0
+text = "Gravity"
+
 [node name="UILayer" type="CanvasLayer" parent="."]
 
 [node name="UI" type="Control" parent="UILayer"]
@@ -202,4 +215,5 @@ wait_time = 5.0
 [connection signal="toggled" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Buttons/dbg_GodMode" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_GodMode_toggled"]
 [connection signal="value_changed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_TimescaleLabel/dbg_TimescaleSlider" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_TimescaleSlider_value_changed"]
 [connection signal="value_changed" from="dbg_DebugLayer/dbg_DebugMenu/dbg_Sliders/dbg_CameraZoomLabel/dbg_CameraZoom" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_dbg_CameraZoom_value_changed"]
+[connection signal="text_entered" from="dbg_DebugLayer/dbg_DebugMenu/GravityEdit" to="dbg_DebugLayer/dbg_DebugMenu" method="_on_GravityEdit_text_entered"]
 [connection signal="timeout" from="MessageTimer" to="." method="_on_MessageTimer_timeout"]

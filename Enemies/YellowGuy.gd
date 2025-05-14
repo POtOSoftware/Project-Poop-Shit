@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 export var health : int = 20
 export var ai_enabled : bool = true
+export var is_flipped: bool = false
 export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weapon = "pistol"
 
 # movement stuffs :3
@@ -17,11 +18,14 @@ var velocity = Vector2()
 
 onready var collision = $CollisionShape2D
 onready var detection_ray = $DetectionRay
+onready var obstacle_ray = $ObstacleRay
 onready var sprite = $Sprite
 onready var gun = $Gun
 
 func _ready():
 	gun.current_weapon = current_weapon
+	flip_node(is_flipped)
+	move_in_current_direction(5)
 
 func die():
 	is_dead = true
@@ -58,6 +62,17 @@ func move_right():
 	velocity.x = move_speed
 	flip_node(false)
 
+func move_in_current_direction(duration: float):
+	# this some bullshit but i dont care :3c
+	if is_flipped:
+		while not is_zero_approx(duration):
+			move_left()
+			duration -= get_physics_process_delta_time()
+	else:
+		while not is_zero_approx(duration):
+			move_right()
+			duration -= get_physics_process_delta_time()
+
 func jump():
 	if is_on_floor():
 		velocity.y = -jump_power
@@ -68,20 +83,31 @@ func stop_moving():
 func update_ai():
 	if detection_ray.get_collider() == Global.player:
 		gun.fire(self)
+	# why jump over the player? I WANNA SHOOT THE PLAYER!
+	# but if it's a wall, then fuck yeah i wanna JUMP!
+	if obstacle_ray.is_colliding():
+		# wah wah nested if statement gay and cringe but lookie now im not scared of my own bullets!
+		if detection_ray.get_collider() != Global.player && !detection_ray.get_collider().is_in_group("bullet"):
+			jump()
+			move_in_current_direction(2)
 
 func flip_node(value: bool):
 	if value:
 		sprite.set_flip_h(true)
 		detection_ray.scale.x = -1
+		obstacle_ray.scale.x = -1
 		gun.rotation_degrees = 180
 		gun.position.x = -13
 		#print(gun.scale)
 	else:
 		sprite.set_flip_h(false)
 		detection_ray.scale.x = 1
+		obstacle_ray.scale.x = 1
 		gun.rotation_degrees = 0
 		gun.position.x = 13
 		#print(gun.scale)
+	
+	is_flipped = value
 
 func _on_PlayerDetection_body_entered(body):
 	var space_state = get_world_2d().direct_space_state

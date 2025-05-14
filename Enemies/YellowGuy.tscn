@@ -28,6 +28,10 @@ position = Vector2( 13, 0 )
 enabled = true
 cast_to = Vector2( 320, 0 )
 
+[node name="ObstacleRay" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 24, 0 )
+
 [node name="Gun" parent="." instance=ExtResource( 3 )]
 position = Vector2( 13, 0 )
 

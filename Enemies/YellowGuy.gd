@@ -47,16 +47,27 @@ func _physics_process(delta):
 	if ai_enabled:
 		update_ai()
 	
+	#move_left()
 	velocity = move_and_slide(velocity, Vector2.UP)
+
+func move_left():
+	velocity.x = -move_speed
+	flip_node(true)
+
+func move_right():
+	velocity.x = move_speed
+	flip_node(false)
 
 func jump():
 	if is_on_floor():
 		velocity.y = -jump_power
 
+func stop_moving():
+	velocity.x = 0
+
 func update_ai():
 	if detection_ray.get_collider() == Global.player:
 		gun.fire(self)
-	jump()
 
 func flip_node(value: bool):
 	if value:
@@ -64,13 +75,13 @@ func flip_node(value: bool):
 		detection_ray.scale.x = -1
 		gun.rotation_degrees = 180
 		gun.position.x = -13
-		print(gun.scale)
+		#print(gun.scale)
 	else:
 		sprite.set_flip_h(false)
 		detection_ray.scale.x = 1
 		gun.rotation_degrees = 0
 		gun.position.x = 13
-		print(gun.scale)
+		#print(gun.scale)
 
 func _on_PlayerDetection_body_entered(body):
 	var space_state = get_world_2d().direct_space_state
@@ -83,6 +94,10 @@ func _on_PlayerDetection_body_entered(body):
 		if result:
 			if result.collider == Global.player:
 				if result.normal.x > 0:
-					flip_node(true)
+					move_left()
 				else:
-					flip_node(false)
+					move_right()
+
+func _on_PlayerDetection_body_exited(body):
+	if body == Global.player and ai_enabled:
+		stop_moving()

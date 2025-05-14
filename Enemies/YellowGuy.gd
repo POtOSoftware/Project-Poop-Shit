@@ -60,13 +60,17 @@ func update_ai():
 
 func flip_node(value: bool):
 	if value:
-		scale = Vector2(-1, 1)
+		sprite.set_flip_h(true)
+		detection_ray.scale.x = -1
 		gun.rotation_degrees = 180
-		print(scale)
+		gun.position.x = -13
+		print(gun.scale)
 	else:
-		scale = Vector2(1, 1)
+		sprite.set_flip_h(false)
+		detection_ray.scale.x = 1
 		gun.rotation_degrees = 0
-		print(scale)
+		gun.position.x = 13
+		print(gun.scale)
 
 func _on_PlayerDetection_body_entered(body):
 	var space_state = get_world_2d().direct_space_state

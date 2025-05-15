@@ -1,8 +1,8 @@
 extends KinematicBody2D
 
-enum states {IDLE, CHASE, FIRE}
+enum states {IDLE, CHASE, FIRE, DEAD}
 
-export var health : int = 20
+export var health : int = 20 setget set_health
 export var reaction: float = 0.25
 export var aggression: int = 3
 export var ai_enabled : bool = true
@@ -16,6 +16,7 @@ export(int) var jump_power = 300
 
 var player_detected : bool = false
 var is_dead : bool = false
+var can_fire: bool = true
 
 var blood = load("res://Assets/Blood.tscn")
 
@@ -36,8 +37,15 @@ func _ready():
 	flip_node(is_flipped)
 	#move_in_current_direction(5)
 
+func set_health(new_value):
+	health = new_value
+	if health <= 0 and is_dead == false:
+		die()
+
 func die():
+	set_new_state(states.DEAD)
 	is_dead = true
+	can_fire = false
 	ai_enabled = false
 	collision.disabled = true
 	modulate = Color(0,0,0,1)
@@ -47,8 +55,8 @@ func die():
 	#blood_instance.global_position = global_position
 	#blood_instance.rotation = global_position.angle_to_point(Global.player.global_position)
 	
-	set_process(false)
 	set_physics_process(false)
+	set_process(false)
 
 func set_new_state(new_state: int) -> void:
 	state = new_state
@@ -71,8 +79,8 @@ func _physics_process(delta):
 	# not even our sworn enemies can avoid gravity
 	velocity.y += GameWorld.GRAVITY * delta
 	
-	if health <= 0 and is_dead == false:
-		die()
+	#if health <= 0 and is_dead == false:
+	#	die()
 	
 	if ai_enabled:
 		update_ai()
@@ -117,14 +125,20 @@ func update_ai():
 			yield(get_tree().create_timer(reaction), "timeout")
 			# im gonna go ahead and fire (for example) 3 times! then go back to chasing
 			while times_fired < aggression:
-				gun.fire(self)
-				print("Firing!")
-				times_fired += 1
-				# wait for the fire rate time so that we dont call fire 3 times, but only fire once, but say we did a good job
-				yield(get_tree().create_timer(gun.weapons[current_weapon].fire_rate), "timeout")
+				if not can_fire:
+					break
+				else:
+					gun.fire(self)
+					print("Firing!")
+					times_fired += 1
+					# wait for the fire rate time so that we dont call fire 3 times, but only fire once, but say we did a good job
+					yield(get_tree().create_timer(gun.weapons[current_weapon].fire_rate), "timeout")
 			
 			set_physics_process(true)
 			set_new_state(states.CHASE)
+		states.DEAD:
+			can_fire = false
+			die()
 		_:
 			printerr("Enemy " + self.name + " had a state error and had to die!")
 			die()

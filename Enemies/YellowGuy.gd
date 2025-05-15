@@ -35,6 +35,7 @@ func _ready():
 	set_new_state(state)
 	gun.current_weapon = current_weapon
 	flip_node(is_flipped)
+	set_process(false)
 	#move_in_current_direction(5)
 
 func set_health(new_value):
@@ -49,6 +50,9 @@ func die():
 	ai_enabled = false
 	collision.disabled = true
 	modulate = Color(0,0,0,1)
+	
+	# stop all timers (there's only one, but for the future nya :3)
+	get_tree().call_group("timers", "stop")
 	
 	#var blood_instance = blood.instance()
 	#get_tree().current_scene.add_child(blood_instance)
@@ -75,9 +79,12 @@ func raycast_to_player() -> bool:
 	
 	return false
 
+func apply_gravity() -> void:
+	velocity.y += GameWorld.GRAVITY * get_physics_process_delta_time()
+
 func _physics_process(delta):
 	# not even our sworn enemies can avoid gravity
-	velocity.y += GameWorld.GRAVITY * delta
+	apply_gravity()
 	
 	#if health <= 0 and is_dead == false:
 	#	die()
@@ -86,6 +93,17 @@ func _physics_process(delta):
 		update_ai()
 	
 	#move_left()
+	velocity = move_and_slide(velocity, Vector2.UP)
+
+# this process function is here when we need things to run at all times
+# should physics process be disabled, we must enable process, these are
+# the most most important things to be run each frame
+func _process(delta):
+	# gravity is ALWAYS present just like the real world
+	# never stop applying gravity even if physics_process is stopped
+	# well... only enable process if phys_process is disabled
+	# we dont need to apply gravity twice!
+	apply_gravity()
 	velocity = move_and_slide(velocity, Vector2.UP)
 
 func update_ai():
@@ -122,6 +140,8 @@ func update_ai():
 			# stopping the physics process from doing anything is the only way to get the intended results
 			# this whole thing is probably gonna shit its pants in the long run but hey, it works!
 			set_physics_process(false)
+			set_process(true)
+			
 			yield(get_tree().create_timer(reaction), "timeout")
 			# im gonna go ahead and fire (for example) 3 times! then go back to chasing
 			while times_fired < aggression:
@@ -134,8 +154,10 @@ func update_ai():
 					# wait for the fire rate time so that we dont call fire 3 times, but only fire once, but say we did a good job
 					yield(get_tree().create_timer(gun.weapons[current_weapon].fire_rate), "timeout")
 			
+			set_process(false)
 			set_physics_process(true)
-			set_new_state(states.CHASE)
+			if not is_dead:
+				set_new_state(states.CHASE)
 		states.DEAD:
 			can_fire = false
 			die()

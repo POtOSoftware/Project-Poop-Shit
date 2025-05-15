@@ -44,7 +44,7 @@ position = Vector2( 13, 0 )
 position = Vector2( 88, 0 )
 shape = SubResource( 2 )
 
-[node name="SearchTime" type="Timer" parent="."]
+[node name="SearchTime" type="Timer" parent="." groups=["timers"]]
 wait_time = 2.0
 
 [connection signal="body_entered" from="Flippable/PlayerDetection" to="." method="_on_PlayerDetection_body_entered"]

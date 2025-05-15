@@ -88,13 +88,17 @@ func update_ai():
 		states.CHASE:
 			# this is stupid and terrible because this assumes that the player was seen in the direction they were already facing, too bad!
 			move_in_current_direction()
+			
+			# ran into a wall, what do?
 			if is_on_wall():
+				# this wall isn't too high for me! im gonna jump over it and keep looking!
 				if not obstacle_ray.is_colliding():
 					# small issue with this is that if the enemy encounters another obstacle before the timer ends,
 					# the timer restarts and they keep moving. on the other hand, it might make the ai look smarter?
 					# hopefully :3c
 					search_timer.start()
 					jump()
+				# DAMN! that wall is too high! gonna turn around and keep point here I suppose
 				else:
 					flip_node(!is_flipped)
 					set_new_state(states.IDLE)

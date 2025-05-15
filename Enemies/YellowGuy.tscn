@@ -28,7 +28,7 @@ shape = SubResource( 1 )
 [node name="DetectionRay" type="RayCast2D" parent="Flippable"]
 position = Vector2( 13, 0 )
 enabled = true
-cast_to = Vector2( 160, 0 )
+cast_to = Vector2( 43, 0 )
 
 [node name="ObstacleRay" type="RayCast2D" parent="Flippable"]
 position = Vector2( 0, -32 )

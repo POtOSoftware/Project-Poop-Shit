@@ -3,6 +3,8 @@ extends KinematicBody2D
 enum states {IDLE, CHASE, FIRE}
 
 export var health : int = 20
+export var reaction: float = 0.25
+export var aggression: int = 3
 export var ai_enabled : bool = true
 export var is_flipped: bool = false
 export(states) var state = states.IDLE
@@ -102,8 +104,27 @@ func update_ai():
 				else:
 					flip_node(!is_flipped)
 					set_new_state(states.IDLE)
+			# i got the player in my range! FIRE!
+			if detection_ray.get_collider() == Global.player:
+				set_new_state(states.FIRE)
 		states.FIRE:
-			pass
+			var times_fired: int = 0
+			
+			stop_moving()
+			# stopping the physics process from doing anything is the only way to get the intended results
+			# this whole thing is probably gonna shit its pants in the long run but hey, it works!
+			set_physics_process(false)
+			yield(get_tree().create_timer(reaction), "timeout")
+			# im gonna go ahead and fire (for example) 3 times! then go back to chasing
+			while times_fired < aggression:
+				gun.fire(self)
+				print("Firing!")
+				times_fired += 1
+				# wait for the fire rate time so that we dont call fire 3 times, but only fire once, but say we did a good job
+				yield(get_tree().create_timer(gun.weapons[current_weapon].fire_rate), "timeout")
+			
+			set_physics_process(true)
+			set_new_state(states.CHASE)
 		_:
 			printerr("Enemy " + self.name + " had a state error and had to die!")
 			die()

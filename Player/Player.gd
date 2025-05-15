@@ -79,7 +79,8 @@ func _ready():
 	Global.player_gun = gun
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	
-	gun.current_weapon = current_weapon
+	gun.set_weapon(current_weapon)
+	#gun.current_weapon = current_weapon
 	
 	add_child(coyote_timer)
 	coyote_timer.wait_time = coyote_time
@@ -114,13 +115,13 @@ func _physics_process(delta):
 		acc.x = -max_acceleration
 		sprite.set_flip_h(true)
 		gun.scale.x = -1
-		gun.rotation_degrees = 180
+		#gun.rotation_degrees = 180
 		gun.position.x = -13
 	if Input.is_action_pressed("move_right"):
 		acc.x = max_acceleration
 		sprite.set_flip_h(false)
 		gun.scale.x = 1
-		gun.rotation_degrees = 0
+		#gun.rotation_degrees = 0
 		gun.position.x = 13
 	
 	

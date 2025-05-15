@@ -33,7 +33,8 @@ onready var search_timer = $SearchTime
 
 func _ready():
 	set_new_state(state)
-	gun.current_weapon = current_weapon
+	gun.set_weapon(current_weapon)
+	#gun.current_weapon = current_weapon
 	flip_node(is_flipped)
 	set_process(false)
 	#move_in_current_direction(5)
@@ -107,6 +108,7 @@ func _process(delta):
 	velocity = move_and_slide(velocity, Vector2.UP)
 
 func update_ai():
+	# only a human can write code this crappy, no AI here
 	match state:
 		states.IDLE:
 			stop_moving()
@@ -204,7 +206,7 @@ func flip_node(value: bool):
 		flippable.scale.x = -1
 		#detection_ray.scale.x = -1
 		#obstacle_ray.scale.x = -1
-		gun.rotation_degrees = 180
+		#gun.rotation_degrees = 180
 		#gun.position.x = -13
 		#print(gun.scale)
 	else:
@@ -212,10 +214,13 @@ func flip_node(value: bool):
 		flippable.scale.x = 1
 		#detection_ray.scale.x = 1
 		#obstacle_ray.scale.x = 1
-		gun.rotation_degrees = 0
+		#gun.rotation_degrees = 0
 		#gun.position.x = 13
 		#print(gun.scale)
 	
+	# still faces the wrong direction in collision debug view
+	# BUT IT WORKS WHO CARES :33333
+	gun.scale.x = flippable.scale.x
 	is_flipped = value
 
 func _on_PlayerDetection_body_entered(body):

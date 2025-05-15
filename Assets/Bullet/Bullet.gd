@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-var direction = Vector2.RIGHT
+var direction
 var bullet_speed = 500
 var gun_damage
 var exclude: Node2D

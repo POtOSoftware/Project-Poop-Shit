@@ -41,13 +41,17 @@ func _on_dbg_GodMode_toggled(button_pressed):
 func _on_dbg_WeaponSelect_item_selected(index):
 	match index:
 		0:
-			Global.player_gun.current_weapon = "pistol"
+			Global.player_gun.set_weapon("pistol")
+			#Global.player_gun.current_weapon = "pistol"
 		1:
-			Global.player_gun.current_weapon = "smg"
+			Global.player_gun.set_weapon("smg")
+			#Global.player_gun.current_weapon = "smg"
 		2:
-			Global.player_gun.current_weapon = "assault_rifle"
+			Global.player_gun.set_weapon("assault_rifle")
+			#Global.player_gun.current_weapon = "assault_rifle"
 		3:
-			Global.player_gun.current_weapon = "death_lazer"
+			Global.player_gun.set_weapon("death_lazer")
+			#Global.player_gun.current_weapon = "death_lazer"
 		
 	print("Changed weapon to " + Global.player_gun.current_weapon)
 

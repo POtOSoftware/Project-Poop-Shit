@@ -1,8 +1,11 @@
 extends KinematicBody2D
 
+enum states {IDLE, CHASE, FIRE}
+
 export var health : int = 20
 export var ai_enabled : bool = true
 export var is_flipped: bool = false
+export(states) var state = states.IDLE
 export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weapon = "pistol"
 
 # movement stuffs :3
@@ -24,6 +27,7 @@ onready var sprite = $Sprite
 onready var gun = $Flippable/Gun
 
 func _ready():
+	set_new_state(state)
 	gun.current_weapon = current_weapon
 	flip_node(is_flipped)
 	#move_in_current_direction(5)
@@ -42,6 +46,10 @@ func die():
 	set_process(false)
 	set_physics_process(false)
 
+func set_new_state(new_state: int) -> void:
+	state = new_state
+	print(self.name + ": Changing state to " + str(states.keys()[state]))
+
 func _physics_process(delta):
 	# not even our sworn enemies can avoid gravity
 	velocity.y += GameWorld.GRAVITY * delta
@@ -54,6 +62,25 @@ func _physics_process(delta):
 	
 	#move_left()
 	velocity = move_and_slide(velocity, Vector2.UP)
+
+func update_ai():
+	var space_state = get_world_2d().direct_space_state
+	
+	match state:
+		states.IDLE:
+			if player_detected:
+				var player_pos = Global.player.global_position
+				var result = space_state.intersect_ray(global_position, player_pos, [self])
+				if result:
+					if result.collider == Global.player:
+						set_new_state(states.CHASE)
+		states.CHASE:
+			pass
+		states.FIRE:
+			pass
+		_:
+			printerr("Enemy " + self.name + " had a state error and had to die!")
+			die()
 
 func move_left():
 	velocity.x = -move_speed
@@ -77,16 +104,16 @@ func jump():
 func stop_moving():
 	velocity.x = 0
 
-func update_ai():
-	if detection_ray.get_collider() == Global.player:
-		gun.fire(self)
-	# why jump over the player? I WANNA SHOOT THE PLAYER!
-	# but if it's a wall, then fuck yeah i wanna JUMP!
-	if obstacle_ray.is_colliding():
-		# wah wah nested if statement gay and cringe but lookie now im not scared of my own bullets!
-		if obstacle_ray.get_collider() != Global.player && !obstacle_ray.get_collider().is_in_group("bullet"):
-			move_in_current_direction()
-			jump()
+#func update_ai():
+#	if detection_ray.get_collider() == Global.player:
+#		gun.fire(self)
+#	# why jump over the player? I WANNA SHOOT THE PLAYER!
+#	# but if it's a wall, then fuck yeah i wanna JUMP!
+#	if obstacle_ray.is_colliding():
+#		# wah wah nested if statement gay and cringe but lookie now im not scared of my own bullets!
+#		if obstacle_ray.get_collider() != Global.player && !obstacle_ray.get_collider().is_in_group("bullet"):
+#			move_in_current_direction()
+#			jump()
 
 func flip_node(value: bool):
 	if value:
@@ -109,21 +136,24 @@ func flip_node(value: bool):
 	is_flipped = value
 
 func _on_PlayerDetection_body_entered(body):
-	print(body)
-	var space_state = get_world_2d().direct_space_state
+	if body == Global.player:
+		player_detected = true
 	
-	if body == Global.player and ai_enabled:
-		var player_pos = Global.player.global_position
-		# draw an invisible line from our position to the player's and get whatever collisions happen on that line, but exclude us, we don't count
-		var result = space_state.intersect_ray(global_position, player_pos, [self])
+	#print(body)
+	#var space_state = get_world_2d().direct_space_state
+	
+	#if body == Global.player and ai_enabled:
+	#	var player_pos = Global.player.global_position
+	#	# draw an invisible line from our position to the player's and get whatever collisions happen on that line, but exclude us, we don't count
+	#	var result = space_state.intersect_ray(global_position, player_pos, [self])
 		
-		if result:
-			if result.collider == Global.player:
-				if result.normal.x > 0:
-					move_left()
-				else:
-					move_right()
+	#	if result:
+	#		if result.collider == Global.player:
+	#			if result.normal.x > 0:
+	#				move_left()
+	#			else:
+	#				move_right()
 
 func _on_PlayerDetection_body_exited(body):
-	if body == Global.player and ai_enabled:
-		stop_moving()
+	if body == Global.player:
+		player_detected = false

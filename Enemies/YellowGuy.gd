@@ -25,7 +25,7 @@ onready var gun = $Gun
 func _ready():
 	gun.current_weapon = current_weapon
 	flip_node(is_flipped)
-	move_in_current_direction(5)
+	#move_in_current_direction(5)
 
 func die():
 	is_dead = true
@@ -62,16 +62,12 @@ func move_right():
 	velocity.x = move_speed
 	flip_node(false)
 
-func move_in_current_direction(duration: float):
+func move_in_current_direction():
 	# this some bullshit but i dont care :3c
 	if is_flipped:
-		while not is_zero_approx(duration):
-			move_left()
-			duration -= get_physics_process_delta_time()
+		move_left()
 	else:
-		while not is_zero_approx(duration):
-			move_right()
-			duration -= get_physics_process_delta_time()
+		move_right()
 
 func jump():
 	if is_on_floor():
@@ -87,9 +83,9 @@ func update_ai():
 	# but if it's a wall, then fuck yeah i wanna JUMP!
 	if obstacle_ray.is_colliding():
 		# wah wah nested if statement gay and cringe but lookie now im not scared of my own bullets!
-		if detection_ray.get_collider() != Global.player && !detection_ray.get_collider().is_in_group("bullet"):
+		if obstacle_ray.get_collider() != Global.player && !obstacle_ray.get_collider().is_in_group("bullet"):
+			move_in_current_direction()
 			jump()
-			move_in_current_direction(2)
 
 func flip_node(value: bool):
 	if value:
@@ -110,6 +106,7 @@ func flip_node(value: bool):
 	is_flipped = value
 
 func _on_PlayerDetection_body_entered(body):
+	print(body)
 	var space_state = get_world_2d().direct_space_state
 	
 	if body == Global.player and ai_enabled:

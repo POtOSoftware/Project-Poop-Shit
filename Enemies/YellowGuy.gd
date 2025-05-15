@@ -17,10 +17,11 @@ var blood = load("res://Assets/Blood.tscn")
 var velocity = Vector2()
 
 onready var collision = $CollisionShape2D
-onready var detection_ray = $DetectionRay
-onready var obstacle_ray = $ObstacleRay
+onready var detection_ray = $Flippable/DetectionRay
+onready var obstacle_ray = $Flippable/ObstacleRay
+onready var flippable = $Flippable
 onready var sprite = $Sprite
-onready var gun = $Gun
+onready var gun = $Flippable/Gun
 
 func _ready():
 	gun.current_weapon = current_weapon
@@ -90,17 +91,19 @@ func update_ai():
 func flip_node(value: bool):
 	if value:
 		sprite.set_flip_h(true)
-		detection_ray.scale.x = -1
-		obstacle_ray.scale.x = -1
+		flippable.scale.x = -1
+		#detection_ray.scale.x = -1
+		#obstacle_ray.scale.x = -1
 		gun.rotation_degrees = 180
-		gun.position.x = -13
+		#gun.position.x = -13
 		#print(gun.scale)
 	else:
 		sprite.set_flip_h(false)
-		detection_ray.scale.x = 1
-		obstacle_ray.scale.x = 1
+		flippable.scale.x = 1
+		#detection_ray.scale.x = 1
+		#obstacle_ray.scale.x = 1
 		gun.rotation_degrees = 0
-		gun.position.x = 13
+		#gun.position.x = 13
 		#print(gun.scale)
 	
 	is_flipped = value

@@ -26,6 +26,8 @@ onready var flippable = $Flippable
 onready var sprite = $Sprite
 onready var gun = $Flippable/Gun
 
+onready var search_timer = $SearchTime
+
 func _ready():
 	set_new_state(state)
 	gun.current_weapon = current_weapon
@@ -50,6 +52,19 @@ func set_new_state(new_state: int) -> void:
 	state = new_state
 	print(self.name + ": Changing state to " + str(states.keys()[state]))
 
+func raycast_to_player() -> bool:
+	var space_state = get_world_2d().direct_space_state
+	
+	var player_pos = Global.player.global_position
+	var result = space_state.intersect_ray(global_position, player_pos, [self])
+	if result:
+		if result.collider == Global.player:
+			return true
+		else:
+			return false
+	
+	return false
+
 func _physics_process(delta):
 	# not even our sworn enemies can avoid gravity
 	velocity.y += GameWorld.GRAVITY * delta
@@ -64,18 +79,25 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity, Vector2.UP)
 
 func update_ai():
-	var space_state = get_world_2d().direct_space_state
-	
 	match state:
 		states.IDLE:
+			stop_moving()
 			if player_detected:
-				var player_pos = Global.player.global_position
-				var result = space_state.intersect_ray(global_position, player_pos, [self])
-				if result:
-					if result.collider == Global.player:
-						set_new_state(states.CHASE)
+				if raycast_to_player():
+					set_new_state(states.CHASE)
 		states.CHASE:
-			pass
+			# this is stupid and terrible because this assumes that the player was seen in the direction they were already facing, too bad!
+			move_in_current_direction()
+			if is_on_wall():
+				if not obstacle_ray.is_colliding():
+					# small issue with this is that if the enemy encounters another obstacle before the timer ends,
+					# the timer restarts and they keep moving. on the other hand, it might make the ai look smarter?
+					# hopefully :3c
+					search_timer.start()
+					jump()
+				else:
+					flip_node(!is_flipped)
+					set_new_state(states.IDLE)
 		states.FIRE:
 			pass
 		_:
@@ -157,3 +179,6 @@ func _on_PlayerDetection_body_entered(body):
 func _on_PlayerDetection_body_exited(body):
 	if body == Global.player:
 		player_detected = false
+
+func _on_SearchTime_timeout():
+	set_new_state(states.IDLE)

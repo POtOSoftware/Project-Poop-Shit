@@ -20,10 +20,11 @@ func _init():
 		print("## DEBUG MODE ENABLED ##")
 
 func _input(event):
-	if event.is_action_pressed("enable_debug_mode"):
+	if Input.is_action_just_pressed("enable_debug_mode"):
 		debug_build = !debug_build
 		if debug_build:
 			player.display_message("Debug mode enabled! Press ~/SELECT for debug menu")
+			print("## DEBUG MODE ENABLED ##")
 			yield(get_tree().create_timer(5), "timeout")
 			debug_accident = false
 		if not debug_build:
@@ -31,4 +32,5 @@ func _input(event):
 				player.display_message("Disabled debug mode. Now stop touching your joystick!")
 			else:
 				player.display_message("Disabled debug mode.")
-		print("## DEBUG MODE ENABLED ##")
+		print("## DEBUG MODE DISABLED ##")
+		

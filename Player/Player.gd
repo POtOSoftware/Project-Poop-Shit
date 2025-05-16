@@ -63,6 +63,11 @@ onready var message_timer = $MessageTimer
 onready var animation = $AnimationPlayer
 onready var flippable = $Flippable
 
+# ui onreadeez nuts
+onready var ui_root = $UILayer/UI
+onready var debug_ui_root = $UILayer/DebugUI
+onready var debug_fps_monitor = $UILayer/DebugUI/FPSMonitor
+
 # key variables (not pretty but im too lazy to have a proper key pickup system)
 export var has_red_key : bool = false
 export var has_green_key : bool = false
@@ -111,8 +116,15 @@ func flip_node(value: bool):
 	is_flipped = value
 
 func _physics_process(delta):
+	if Global.debug_build:
+		debug_ui_root.visible = true
+		process_debug()
+	else:
+		debug_ui_root.visible = false
+	
 	acc.x = 0
 	
+	# TODO: Only update this when health is changed
 	health_bar.value = health
 	
 	if health <= 0 and can_die:
@@ -183,7 +195,6 @@ func _physics_process(delta):
 	vel += acc * delta
 	vel = move_and_slide(vel, Vector2.UP)
 
-
 func display_message(message : String):
 	message_label.text = message # Set message text to string specified in argument
 	animation.play("show_message") # I like this kinda text reveal animation
@@ -191,6 +202,8 @@ func display_message(message : String):
 	#yield(get_tree().create_timer(5), "timeout") # Wait 5 seconds before clearing message
 	#message_label.text = "" # Clear message
 
+func process_debug():
+	debug_fps_monitor.text = "FPS: " + str(Engine.get_frames_per_second())
 
 func calculate_gravity(p_max_jump_height, p_jump_duration):
 	# Calculates the desired gravity by looking at our jump height and jump duration

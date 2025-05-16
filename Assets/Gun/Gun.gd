@@ -18,7 +18,8 @@ var weapons = {
 		fire_rate = 0.33,
 		num_projectiles = 1,
 		projectile = preload("res://Assets/Bullet/Bullet.tscn"),
-		sprite = preload("res://Sprites/guns/pistol.png")
+		sprite = preload("res://Sprites/guns/pistol.png"),
+		fire_pos = Vector2(8, -4)
 	},
 	"smg" : {
 		damage = 5,
@@ -49,6 +50,7 @@ func _ready():
 func set_weapon(new_weapon: String) -> void:
 	current_weapon = new_weapon
 	gun_sprite.texture = weapons[new_weapon].sprite
+	fire_point.position = weapons[new_weapon].fire_pos
 
 func fire(_exclude: Node2D = null):
 	if ammo > 0 and can_fire:

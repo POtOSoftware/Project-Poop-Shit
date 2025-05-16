@@ -50,7 +50,14 @@ func _ready():
 func set_weapon(new_weapon: String) -> void:
 	current_weapon = new_weapon
 	gun_sprite.texture = weapons[new_weapon].sprite
-	fire_point.position = weapons[new_weapon].fire_pos
+	
+	# check if there's a specified fire point position
+	if weapons[new_weapon].has("fire_pos"):
+		fire_point.position = weapons[new_weapon].fire_pos
+	else:
+		# if not, cry about it and set it to (0,0)
+		printerr("Fire point position not specified in weapon " + new_weapon + " !!!")
+		fire_point.position = Vector2(0,0)
 
 func fire(_exclude: Node2D = null):
 	if ammo > 0 and can_fire:

@@ -26,7 +26,8 @@ var weapons = {
 		fire_rate = 0.05,
 		num_projectiles = 1,
 		projectile = preload("res://Assets/Bullet/Bullet.tscn"),
-		sprite = preload("res://icon.png")
+		sprite = preload("res://Sprites/guns/smg.png"),
+		fire_pos = Vector2(20, -5)
 	},
 	"assault_rifle" : {
 		damage = 20,

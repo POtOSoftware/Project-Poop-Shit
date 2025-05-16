@@ -67,16 +67,18 @@ func set_new_state(new_state: int) -> void:
 	state = new_state
 	print(self.name + ": Changing state to " + str(states.keys()[state]))
 
-func raycast_to_player() -> bool:
+func raycast_to_player():
 	var space_state = get_world_2d().direct_space_state
 	
 	var player_pos = Global.player.global_position
 	var result = space_state.intersect_ray(global_position, player_pos, [self])
 	if result:
 		if result.collider == Global.player:
-			return true
+			return {"player_detected":true,
+					"player_x_normal": result.normal.x}
 		else:
-			return false
+			return {"player_detected": false,
+					"player_x_normal": 0}
 	
 	return false
 
@@ -113,7 +115,14 @@ func update_ai():
 		states.IDLE:
 			stop_moving()
 			if player_detected:
-				if raycast_to_player():
+				# waste of resources to cast a ray multiple times to find out if the player is there and the player's normal
+				var _player_raycast = raycast_to_player()
+				
+				if _player_raycast.player_detected:
+					if _player_raycast.player_x_normal > 0:
+						flip_node(true)
+					else:
+						flip_node(false)
 					set_new_state(states.CHASE)
 		states.CHASE:
 			# this is stupid and terrible because this assumes that the player was seen in the direction they were already facing, too bad!

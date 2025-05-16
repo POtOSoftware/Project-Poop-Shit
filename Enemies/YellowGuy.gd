@@ -29,7 +29,12 @@ onready var flippable = $Flippable
 onready var sprite = $Sprite
 onready var gun = $Flippable/Gun
 
+# timers
 onready var search_timer = $SearchTime
+
+# debug stuff
+onready var debug_root = $Debug
+onready var debug_state_display = $Debug/DebugState
 
 func _ready():
 	set_new_state(state)
@@ -91,6 +96,12 @@ func _physics_process(delta):
 	
 	#if health <= 0 and is_dead == false:
 	#	die()
+	
+	if Global.debug_build:
+		debug_root.visible = true
+		process_debug()
+	else:
+		debug_root.visible = false
 	
 	if ai_enabled:
 		update_ai()
@@ -232,6 +243,9 @@ func flip_node(value: bool):
 	# turns out i shouldve cared, cause then sprites would face the wrong direction
 	#gun.scale.x = flippable.scale.x
 	is_flipped = value
+
+func process_debug():
+	debug_state_display.text = states.keys()[state]
 
 func _on_PlayerDetection_body_entered(body):
 	if body == Global.player:

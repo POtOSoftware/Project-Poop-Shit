@@ -5,6 +5,7 @@ extends KinematicBody2D
 # Game-specific vars
 export var health : int = 100
 export var can_move : bool = true
+export var is_flipped: bool = false
 export(String, "pistol", "smg", "assault_rifle", "death_lazer") var current_weapon = "pistol"
 
 var can_die : bool = true
@@ -55,11 +56,12 @@ onready var jump_buffer_timer = Timer.new()
 
 # node onready vars
 onready var sprite = $Sprite
-onready var gun = $Gun
+onready var gun = $Flippable/Gun
 onready var health_bar = $UILayer/UI/HealthBar
 onready var message_label = $UILayer/UI/MessageLabel
 onready var message_timer = $MessageTimer
 onready var animation = $AnimationPlayer
+onready var flippable = $Flippable
 
 # key variables (not pretty but im too lazy to have a proper key pickup system)
 export var has_red_key : bool = false
@@ -98,6 +100,16 @@ func die():
 	can_die = false
 	queue_free()
 
+func flip_node(value: bool):
+	if value:
+		sprite.set_flip_h(true)
+		flippable.scale.x = -1
+	else:
+		sprite.set_flip_h(false)
+		flippable.scale.x = 1
+
+	is_flipped = value
+
 func _physics_process(delta):
 	acc.x = 0
 	
@@ -113,16 +125,18 @@ func _physics_process(delta):
 	
 	if Input.is_action_pressed("move_left"):
 		acc.x = -max_acceleration
-		sprite.set_flip_h(true)
-		gun.scale.x = -1
+		flip_node(true)
+		#sprite.set_flip_h(true)
+		#gun.scale.x = -1
 		#gun.rotation_degrees = 180
-		gun.position.x = -13
+		#gun.position.x = -13
 	if Input.is_action_pressed("move_right"):
 		acc.x = max_acceleration
-		sprite.set_flip_h(false)
-		gun.scale.x = 1
+		flip_node(false)
+		#sprite.set_flip_h(false)
+		#gun.scale.x = 1
 		#gun.rotation_degrees = 0
-		gun.position.x = 13
+		#gun.position.x = 13
 	
 	
 	# Check for ground jumps when we can hold jump

@@ -61,7 +61,9 @@ smoothing_enabled = true
 smoothing_speed = 20.0
 editor_draw_drag_margin = true
 
-[node name="Gun" parent="." instance=ExtResource( 4 )]
+[node name="Flippable" type="Node2D" parent="."]
+
+[node name="Gun" parent="Flippable" instance=ExtResource( 4 )]
 position = Vector2( 13, 0 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

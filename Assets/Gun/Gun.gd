@@ -7,6 +7,7 @@ export var ammo : int = 1000
 var current_weapon
 var can_fire = true
 var damage = 0
+var parent: Node2D
 
 onready var gun_sprite = $GunSprite
 onready var fire_point = $FirePoint
@@ -17,7 +18,7 @@ var weapons = {
 		fire_rate = 0.33,
 		num_projectiles = 1,
 		projectile = preload("res://Assets/Bullet/Bullet.tscn"),
-		sprite = preload("res://icon.png")
+		sprite = preload("res://Sprites/guns/pistol.png")
 	},
 	"smg" : {
 		damage = 5,
@@ -40,6 +41,11 @@ var weapons = {
 	}
 }
 
+func _ready():
+	# so it's not grabbing the parent every time it creates a bullet
+	# just do it once here and save it
+	parent = get_parent()
+
 func set_weapon(new_weapon: String) -> void:
 	current_weapon = new_weapon
 	gun_sprite.texture = weapons[new_weapon].sprite
@@ -54,8 +60,7 @@ func create_bullet(num_projectiles : int = 1, _exclude: Node2D = null):
 	for i in num_projectiles:
 		var projectile_instance = weapons[current_weapon].projectile.instance()
 		projectile_instance.position = fire_point.global_position
-		# looks weird but it works so nyaaaaaa :p
-		projectile_instance.direction = Vector2.RIGHT * scale.x
+		projectile_instance.direction = Vector2.RIGHT * parent.scale.x # looks weird but it works so nyaaaaaa :p
 		projectile_instance.gun_damage = weapons[current_weapon].damage
 		projectile_instance.set_exclude(_exclude)
 		get_tree().get_root().add_child(projectile_instance)

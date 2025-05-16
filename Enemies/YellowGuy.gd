@@ -220,7 +220,8 @@ func flip_node(value: bool):
 	
 	# still faces the wrong direction in collision debug view
 	# BUT IT WORKS WHO CARES :33333
-	gun.scale.x = flippable.scale.x
+	# turns out i shouldve cared, cause then sprites would face the wrong direction
+	#gun.scale.x = flippable.scale.x
 	is_flipped = value
 
 func _on_PlayerDetection_body_entered(body):

@@ -9,6 +9,7 @@ onready var cam_zoom_label = $dbg_Sliders/dbg_CameraZoomLabel
 func _input(event):
 	if event.is_action_pressed("toggle_debug_menu") and Global.debug_build:
 		var new_pause_state = not get_tree().paused
+		Global.debug_accident = false
 		Global.set_pause(new_pause_state)
 		visible = Global.game_paused
 		if visible:

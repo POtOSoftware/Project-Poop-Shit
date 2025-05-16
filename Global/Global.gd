@@ -8,6 +8,8 @@ var game_paused = false
 var player = null
 var player_gun = null
 
+var debug_accident: bool = true
+
 func set_pause(pause : bool):
 	get_tree().paused = pause
 	game_paused = pause
@@ -19,5 +21,14 @@ func _init():
 
 func _input(event):
 	if event.is_action_pressed("enable_debug_mode"):
-		debug_build = true
+		debug_build = !debug_build
+		if debug_build:
+			player.display_message("Debug mode enabled! Press ~/SELECT for debug menu")
+			yield(get_tree().create_timer(5), "timeout")
+			debug_accident = false
+		if not debug_build:
+			if debug_accident:
+				player.display_message("Disabled debug mode. Now stop touching your joystick!")
+			else:
+				player.display_message("Disabled debug mode.")
 		print("## DEBUG MODE ENABLED ##")

@@ -34,7 +34,8 @@ var weapons = {
 		fire_rate = 0.2,
 		num_projectiles = 1,
 		projectile = preload("res://Assets/Bullet/Bullet.tscn"),
-		sprite = preload("res://icon.png")
+		sprite = preload("res://Sprites/guns/assault_rifle.png"),
+		fire_pos = Vector2(23, -3)
 	},
 	"death_lazer" : {
 		damage = 2,
@@ -45,7 +46,7 @@ var weapons = {
 
 func _ready():
 	# so it's not grabbing the parent every time it creates a bullet
-	# just do it once here and save it
+	# just do it once here and save it, saves resources! i hope!
 	parent = get_parent()
 
 func set_weapon(new_weapon: String) -> void:

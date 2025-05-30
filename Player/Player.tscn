@@ -91,9 +91,7 @@ margin_left = 163.0
 margin_top = 44.0
 margin_right = 228.0
 margin_bottom = 64.0
-text = "pistol"
-items = [ "pistol", null, false, 0, null, "smg", null, false, 1, null, "assault_rifle", null, false, 2, null, "death_lazer", null, false, 3, null ]
-selected = 0
+text = "EMPTY"
 
 [node name="dbg_Buttons" type="Control" parent="dbg_DebugLayer/dbg_DebugMenu"]
 margin_left = 315.0

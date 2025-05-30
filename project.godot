@@ -23,6 +23,7 @@ GameWorld="*res://Global/World.gd"
 
 window/size/width=480
 window/size/height=272
+window/vsync/use_vsync=false
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 

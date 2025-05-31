@@ -12,7 +12,7 @@ func _physics_process(delta):
 	global_position += direction * bullet_speed * delta
 
 func set_exclude(node: Node2D = null):
-	print("Excluding " + node.name + " from being damaged by " + self.name)
+	#print("Excluding " + node.name + " from being damaged by " + self.name)
 	exclude = node
 
 func _on_Bullet_body_entered(body):
